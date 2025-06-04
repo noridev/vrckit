@@ -97,3 +97,6 @@ iOSInjectionProject/
 
 # VSCode Settings
 .vscode
+
+# IntelliJ
+/.idea
