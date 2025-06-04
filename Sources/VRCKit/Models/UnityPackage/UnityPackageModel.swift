@@ -11,7 +11,12 @@ import MemberwiseInit
 @MemberwiseInit(.public)
 public struct UnityPackage: Sendable, Identifiable, Hashable {
     public let id: String
-    @SafeDecoding public var assetUrl: URL?
+    @InitWrapper(type: SafeDecoding<URL>)
+    public var assetUrl: URL? {
+        get { _assetUrl.wrappedValue }
+        set { _assetUrl.wrappedValue = newValue }
+    }
+    @SafeDecoding private var _assetUrl: URL?
     public let assetVersion: Int
     public let createdAt: OptionalISO8601Date
     public let platform: Platform
