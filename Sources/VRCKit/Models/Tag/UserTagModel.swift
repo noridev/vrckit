@@ -39,7 +39,7 @@ extension UserTags: Decodable {
 extension UserTags: Encodable {
     public func encode(to encoder: any Encoder) throws {
         var container = encoder.unkeyedContainer()
-        let tags = languageTags.map(\.rawValue)
+        let tags = systemTags.map { $0.rawValue } + languageTags.map { $0.rawValue } + unknownTags
         for tag in tags {
             try container.encode(tag)
         }

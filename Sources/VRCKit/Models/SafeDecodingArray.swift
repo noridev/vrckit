@@ -40,6 +40,12 @@ extension SafeDecodingArray: Hashable where T: Hashable {
     }
 }
 
-extension SafeDecodingArray: Encodable where T: Encodable {}
+extension SafeDecodingArray: Encodable where T: Encodable {
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(wrappedValue)
+    }
+}
+
 extension SafeDecodingArray: Equatable where T: Equatable {}
 extension SafeDecodingArray: Sendable where T: Sendable {}

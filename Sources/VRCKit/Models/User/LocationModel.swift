@@ -24,4 +24,18 @@ extension Location: Codable {
             self = .id(value)
         }
     }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case .id(let value):
+            try container.encode(value)
+        case .private:
+            try container.encode("private")
+        case .offline:
+            try container.encode("offline")
+        case .traveling:
+            try container.encode("traveling")
+        }
+    }
 }
