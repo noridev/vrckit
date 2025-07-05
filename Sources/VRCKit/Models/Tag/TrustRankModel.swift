@@ -11,8 +11,16 @@ public enum TrustRank: Equatable, Sendable {
 
 public extension ProfileElementRepresentable {
     var systemTag: SystemTag? {
-        SystemTag.rankTags.first { tags.systemTags.contains($0) }
+        let orderedTrustRankTags: [SystemTag] = [
+            .systemTrustVeteran,
+            .systemTrustTrusted,
+            .systemTrustKnown,
+            .systemTrustBasic
+        ]
+        
+        return orderedTrustRankTags.first { tags.systemTags.contains($0) }
     }
+    
     var trustRank: TrustRank {
         switch systemTag {
         case .systemTrustVeteran: .trusted
