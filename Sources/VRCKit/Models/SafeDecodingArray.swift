@@ -13,20 +13,26 @@ public struct SafeDecodingArray<T> {
 }
 
 extension SafeDecodingArray: Decodable where T: Decodable {
-    private struct AnyDecodable: Decodable {}
     public init(from decoder: Decoder) throws {
-        wrappedValue = []
-        var container = try decoder.unkeyedContainer()
-        while !container.isAtEnd {
-            if let value = try? container.decode(T.self) {
-                wrappedValue.append(value)
-            } else {
-                // Skip the decorder cursor
-                _ = try container.decode(AnyDecodable.self)
+        do {
+            var container = try decoder.unkeyedContainer()
+            var elements: [T] = .init()
+            while !container.isAtEnd {
+                if let element = try? container.decode(T.self) {
+                    elements.append(element)
+                } else {
+                    // Skip the decorder cursor
+                    _ = try? container.decode(Empty.self)
+                }
             }
+            wrappedValue = elements
+        } catch {
+            wrappedValue = []
         }
     }
 }
+
+private struct Empty: Decodable {}
 
 extension SafeDecodingArray: Hashable where T: Hashable {
     public static func == (lhs: SafeDecodingArray<T>, rhs: SafeDecodingArray<T>) -> Bool {
