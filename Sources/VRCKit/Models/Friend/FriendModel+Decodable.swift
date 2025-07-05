@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Friend: Decodable {
+extension Friend {
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: UserCodingKeys.self)
         bio = try container.decodeIfPresent(String.self, forKey: .bio)

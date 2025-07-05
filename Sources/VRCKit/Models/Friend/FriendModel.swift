@@ -9,7 +9,7 @@ import Foundation
 import MemberwiseInit
 
 @MemberwiseInit(.public)
-public struct Friend: Sendable, ProfileElementRepresentable, LocationRepresentable {
+public struct Friend: Sendable, ProfileElementRepresentable, LocationRepresentable, Codable {
     public let bio: String?
     public var bioLinks: SafeDecodingArray<URL>
     public let avatarImageUrl: URL?
