@@ -34,6 +34,8 @@ public protocol ProfileDetailRepresentable: ProfileElementRepresentable {
     var dateJoined: Date? { get }
     var lastActivity: Date? { get }
     var state: User.State { get }
+    var ageVerified: Bool { get }
+    var ageVerificationStatus: AgeVerificationStatus { get }
 }
 
 public extension ProfileElementRepresentable {
