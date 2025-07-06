@@ -17,7 +17,9 @@ extension Friend {
         try container.encode(displayName, forKey: .displayName)
         try container.encode(id, forKey: .id)
         try container.encode(isFriend, forKey: .isFriend)
-        try container.encode(lastLogin, forKey: .lastLogin)
+        try lastLogin.map {
+            try container.encode(DateFormatter.iso8601Full.string(from: $0), forKey: .lastLogin)
+        }
         try container.encode(lastPlatform, forKey: .lastPlatform)
         try container.encode(platform, forKey: .platform)
         try container.encodeIfPresent(profilePicOverride, forKey: .profilePicOverride)

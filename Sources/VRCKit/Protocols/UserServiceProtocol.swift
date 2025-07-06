@@ -18,4 +18,10 @@ public protocol UserServiceProtocol: Sendable {
     ///   - editedInfo: An `EditableUserInfo` object containing the updated user information.
     /// - Throws: An error if the request fails or encoding is unsuccessful.
     func updateUser(id: String, editedInfo: EditableUserInfo) async throws
+
+    /// Searches for users with the specified display name.
+    /// - Parameter displayName: The display name of the user to search for.
+    /// - Returns: An array of `LimitedUser` objects matching the search query.
+    /// - Throws: An error if the request fails or decoding is unsuccessful.
+    func searchUser(displayName: String, n: Int, offset: Int) async throws -> [LimitedUser]
 }

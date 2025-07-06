@@ -17,15 +17,19 @@ extension Friend {
         displayName = try container.decode(String.self, forKey: .displayName)
         id = try container.decode(Friend.ID.self, forKey: .id)
         isFriend = try container.decode(Bool.self, forKey: .isFriend)
-        lastLogin = try container.decode(Date.self, forKey: .lastLogin)
-        lastPlatform = try container.decode(String.self, forKey: .lastPlatform)
-        profilePicOverride = try? container.decodeIfPresent(URL.self, forKey: .profilePicOverride)
+        let lastLoginString = try container.decodeIfPresent(String.self, forKey: .lastLogin)
+        lastLogin = lastLoginString.flatMap { DateFormatter.iso8601Full.date(from: $0) }
+        lastPlatform = try container.decodeIfPresent(String.self, forKey: .lastPlatform)
+        let profilePicOverrideString = try container.decodeIfPresent(String.self, forKey: .profilePicOverride)
+        profilePicOverride = profilePicOverrideString.flatMap { URL(string: $0) }
         status = try container.decode(UserStatus.self, forKey: .status)
         statusDescription = try container.decode(String.self, forKey: .statusDescription)
         tags = try container.decode(UserTags.self, forKey: .tags)
-        userIcon = try? container.decodeIfPresent(URL.self, forKey: .userIcon)
+        let userIconString = try container.decodeIfPresent(String.self, forKey: .userIcon)
+        userIcon = userIconString.flatMap { URL(string: $0) }
         location = try container.decode(Location.self, forKey: .location)
-        friendKey = try container.decode(String.self, forKey: .friendKey)
-        platform = try container.decode(UserPlatform.self, forKey: .platform)
+        friendKey = try container.decodeIfPresent(String.self, forKey: .friendKey)
+        let platformString = try container.decodeIfPresent(String.self, forKey: .platform)
+        platform = platformString.flatMap { UserPlatform(rawValue: $0) }
     }
 }

@@ -43,5 +43,6 @@ public extension User {
         userLanguage = user.userLanguage
         userLanguageCode = user.userLanguageCode
         presence = user.presence
+        platform = user.platform
     }
 }

@@ -17,16 +17,16 @@ public struct Friend: Sendable, ProfileElementRepresentable, LocationRepresentab
     public let displayName: String
     public let id: String
     public let isFriend: Bool
-    public let lastLogin: Date
-    public let lastPlatform: String
-    public let platform: UserPlatform
+    public let lastLogin: Date?
+    public let lastPlatform: String?
+    public let platform: UserPlatform?
     public let profilePicOverride: URL?
     public let status: UserStatus
     public let statusDescription: String
     public let tags: UserTags
     public let userIcon: URL?
     public let location: Location
-    public let friendKey: String
+    public let friendKey: String?
 }
 
 @MemberwiseInit(.public)

@@ -13,7 +13,7 @@ public struct Presence: Codable, Hashable, Sendable {
     public let id: String
     public let instance: String
     public let instanceType: String
-    public let platform: UserPlatform
+    public let platform: UserPlatform?
     public let status: UserStatus
     public let travelingToInstance: String
     public let travelingToWorld: String

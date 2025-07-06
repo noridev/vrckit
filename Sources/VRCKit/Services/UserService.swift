@@ -6,6 +6,7 @@
 //
 
 import MemberwiseInit
+import Foundation
 
 @MemberwiseInit(.public)
 public final actor UserService: APIService, UserServiceProtocol {
@@ -24,5 +25,15 @@ public final actor UserService: APIService, UserServiceProtocol {
             method: .put,
             body: requestData
         )
+    }
+
+    public func searchUser(displayName: String, n: Int = 100, offset: Int = 0) async throws -> [LimitedUser] {
+        let queryItems = [
+            URLQueryItem(name: "search", value: displayName),
+            URLQueryItem(name: "n", value: String(n)),
+            URLQueryItem(name: "offset", value: String(offset))
+        ]
+        let response = try await client.request(path: path, method: .get, queryItems: queryItems)
+        return try Serializer.shared.decode(response.data)
     }
 }

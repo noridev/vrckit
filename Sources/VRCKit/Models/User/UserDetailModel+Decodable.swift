@@ -19,20 +19,25 @@ extension UserDetail: Decodable {
         displayName = try container.decode(String.self, forKey: .displayName)
         id = try container.decode(UserDetail.ID.self, forKey: .id)
         isFriend = try container.decode(Bool.self, forKey: .isFriend)
-        lastLogin = try container.decode(Date.self, forKey: .lastLogin)
-        lastPlatform = try container.decode(String.self, forKey: .lastPlatform)
-        profilePicOverride = try? container.decodeIfPresent(URL.self, forKey: .profilePicOverride)
+        let lastLoginString = try container.decodeIfPresent(String.self, forKey: .lastLogin)
+        lastLogin = lastLoginString.flatMap { DateFormatter.iso8601Full.date(from: $0) }
+        lastPlatform = try container.decodeIfPresent(String.self, forKey: .lastPlatform)
+        let profilePicOverrideString = try container.decodeIfPresent(String.self, forKey: .profilePicOverride)
+        profilePicOverride = profilePicOverrideString.flatMap { URL(string: $0) }
         state = try container.decode(User.State.self, forKey: .state)
         status = try container.decode(UserStatus.self, forKey: .status)
         statusDescription = try container.decode(String.self, forKey: .statusDescription)
         tags = try container.decode(UserTags.self, forKey: .tags)
-        userIcon = try? container.decodeIfPresent(URL.self, forKey: .userIcon)
+        let userIconString = try container.decodeIfPresent(String.self, forKey: .userIcon)
+        userIcon = userIconString.flatMap { URL(string: $0) }
         location = try container.decode(Location.self, forKey: .location)
-        friendKey = try container.decode(String.self, forKey: .friendKey)
+        friendKey = try container.decodeIfPresent(String.self, forKey: .friendKey)
         let dateJoinedString = try container.decode(String.self, forKey: .dateJoined)
         dateJoined = DateFormatter.dateStringFormat.date(from: dateJoinedString)
         note = try container.decode(String.self, forKey: .note)
-        lastActivity = try container.decode(Date.self, forKey: .lastActivity)
-        platform = try container.decode(UserPlatform.self, forKey: .platform)
+        let lastActivityString = try container.decodeIfPresent(String.self, forKey: .lastActivity)
+        lastActivity = lastActivityString.flatMap { DateFormatter.iso8601Full.date(from: $0) }
+        let platformString = try container.decodeIfPresent(String.self, forKey: .platform)
+        platform = platformString.flatMap { UserPlatform(rawValue: $0) }
     }
 }

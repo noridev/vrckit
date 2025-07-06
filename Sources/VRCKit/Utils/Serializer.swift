@@ -34,6 +34,19 @@ final class Serializer: Sendable {
         do {
             return try decoder.decode(T.self, from: data)
         } catch let error as DecodingError {
+            switch error {
+            case .keyNotFound(let key, let context):
+                print("Error: Key '\(key.stringValue)' not found at codingPath: \(context.codingPath)")
+            case .valueNotFound(let type, let context):
+                print("Error: Value of type '\(type)' not found at codingPath: \(context.codingPath)")
+            case .typeMismatch(let type, let context):
+                print("Error: Type '\(type)' mismatch at codingPath: \(context.codingPath)")
+            case .dataCorrupted(let context):
+                print("Error: Data corrupted at codingPath: \(context.codingPath)")
+            @unknown default:
+                print("An unknown decoding error occurred: \(error.localizedDescription)")
+            }
+
             do {
                 let errorResponse = try decoder.decode(ErrorResponse.self, from: data)
                 if errorResponse.error.statusCode == 401 {

@@ -21,14 +21,14 @@ public struct User: Sendable, ProfileDetailRepresentable {
     public let avatarThumbnailUrl: URL?
     public let dateJoined: Date?
     public let displayName: String
-    public let friendKey: String
+    public let friendKey: String?
     public let friends: [String]
     public let homeLocation: String
     public let id: String
     public let isFriend: Bool
-    public let lastActivity: Date
-    public let lastLogin: Date
-    public let lastPlatform: String
+    public let lastActivity: Date?
+    public let lastLogin: Date?
+    public let lastPlatform: String?
     public let offlineFriends: [String]
     public let onlineFriends: [String]
     public let pastDisplayNames: [DisplayName]
@@ -42,6 +42,7 @@ public struct User: Sendable, ProfileDetailRepresentable {
     public let userLanguage: String?
     public let userLanguageCode: String?
     public let presence: Presence
+    public let platform: UserPlatform?
 
     public enum State: String, Codable, Sendable {
         /// User is online in VRChat
@@ -71,10 +72,6 @@ extension User: RawRepresentable {
         guard let encoded = String(data: data, encoding: .utf8) else { return "" }
         return encoded
     }
-}
-
-public extension User {
-    var platform: UserPlatform { presence.platform }
 }
 
 public extension User {

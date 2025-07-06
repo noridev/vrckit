@@ -43,5 +43,6 @@ extension User: Encodable {
         try container.encodeIfPresent(userLanguage, forKey: .userLanguage)
         try container.encodeIfPresent(userLanguageCode, forKey: .userLanguageCode)
         try container.encode(presence, forKey: .presence)
+        try container.encodeIfPresent(platform, forKey: .platform)
     }
 }
