@@ -9,7 +9,7 @@ import Foundation
 import MemberwiseInit
 
 @MemberwiseInit(.public)
-public struct UserDetail: Sendable, ProfileDetailRepresentable, LocationRepresentable {
+public struct UserDetail: Sendable, ProfileDetailRepresentable, LocationRepresentable, Encodable {
     public let ageVerificationStatus: AgeVerificationStatus
     public let ageVerified: Bool
     public var bio: String?
@@ -38,5 +38,40 @@ public struct UserDetail: Sendable, ProfileDetailRepresentable, LocationRepresen
 public extension UserDetail {
     var url: URL? {
         URL(string: [Const.homeBaseUrl, "user", id].joined(separator: "/"))
+    }
+}
+
+extension UserDetail {
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: UserCodingKeys.self)
+        try container.encode(ageVerificationStatus, forKey: .ageVerificationStatus)
+        try container.encode(ageVerified, forKey: .ageVerified)
+        try container.encodeIfPresent(bio, forKey: .bio)
+        try container.encode(bioLinks.wrappedValue, forKey: .bioLinks)
+        try container.encodeIfPresent(avatarImageUrl, forKey: .currentAvatarImageUrl)
+        try container.encodeIfPresent(avatarThumbnailUrl, forKey: .currentAvatarThumbnailImageUrl)
+        try container.encode(displayName, forKey: .displayName)
+        try container.encode(id, forKey: .id)
+        try container.encode(isFriend, forKey: .isFriend)
+        if let lastLogin = lastLogin {
+            try container.encode(DateFormatter.iso8601Full.string(from: lastLogin), forKey: .lastLogin)
+        }
+        try container.encodeIfPresent(lastPlatform, forKey: .lastPlatform)
+        try container.encodeIfPresent(profilePicOverride, forKey: .profilePicOverride)
+        try container.encode(state, forKey: .state)
+        try container.encode(status, forKey: .status)
+        try container.encode(statusDescription, forKey: .statusDescription)
+        try container.encode(tags, forKey: .tags)
+        try container.encodeIfPresent(userIcon, forKey: .userIcon)
+        try container.encode(location, forKey: .location)
+        try container.encodeIfPresent(friendKey, forKey: .friendKey)
+        if let dateJoined = dateJoined {
+            try container.encode(DateFormatter.dateStringFormat.string(from: dateJoined), forKey: .dateJoined)
+        }
+        try container.encode(note, forKey: .note)
+        if let lastActivity = lastActivity {
+            try container.encode(DateFormatter.iso8601Full.string(from: lastActivity), forKey: .lastActivity)
+        }
+        try container.encodeIfPresent(platform, forKey: .platform)
     }
 }
