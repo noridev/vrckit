@@ -35,7 +35,7 @@ public struct Instance: Sendable, Identifiable, Hashable, Decodable {
     }
 
     public enum GroupAccessType: String, Sendable, Codable {
-        case `public`, plus
+        case `public`, plus, members
     }
 
     public enum Region: String, Sendable, Codable, CaseIterable {
@@ -109,6 +109,7 @@ extension Instance.GroupAccessType {
         switch self {
         case .public: .groupPublic
         case .plus: .groupPlus
+        case .members: .group
         }
     }
 }
