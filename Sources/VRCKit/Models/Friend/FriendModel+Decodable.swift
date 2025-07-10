@@ -10,6 +10,8 @@ import Foundation
 extension Friend {
     public init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: UserCodingKeys.self)
+        ageVerificationStatus = try container.decodeIfPresent(AgeVerificationStatus.self, forKey: .ageVerificationStatus)
+        ageVerified = try container.decodeIfPresent(Bool.self, forKey: .ageVerified)
         bio = try container.decodeIfPresent(String.self, forKey: .bio)
         bioLinks = try container.decodeSafeNullableArray(URL.self, forKey: .bioLinks)
         avatarImageUrl = try container.decodeIfPresent(URL.self, forKey: .currentAvatarImageUrl)

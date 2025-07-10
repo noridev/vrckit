@@ -10,6 +10,8 @@ import MemberwiseInit
 
 @MemberwiseInit(.public)
 public struct Friend: Sendable, ProfileElementRepresentable, LocationRepresentable, Codable {
+    public let ageVerificationStatus: AgeVerificationStatus?
+    public let ageVerified: Bool?
     public let bio: String?
     public var bioLinks: SafeDecodingArray<URL>
     public let avatarImageUrl: URL?

@@ -10,6 +10,8 @@ import Foundation
 extension Friend {
     public func encode(to encoder: any Encoder) throws {
         var container = encoder.container(keyedBy: UserCodingKeys.self)
+        try container.encodeIfPresent(ageVerificationStatus, forKey: .ageVerificationStatus)
+        try container.encodeIfPresent(ageVerified, forKey: .ageVerified)
         try container.encodeIfPresent(bio, forKey: .bio)
         try container.encode(bioLinks, forKey: .bioLinks)
         try container.encodeIfPresent(avatarImageUrl, forKey: .currentAvatarImageUrl)
