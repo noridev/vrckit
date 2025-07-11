@@ -30,11 +30,17 @@ public enum VRCKitError: Error, LocalizedError, Equatable {
     /// Represents an error indicating an invalid request with additional details.
     case invalidRequest(_ details: String)
 
-    /// Represents an error indicating an authentication failure.
-    case unauthorized
+    /// Represents an error indicating an authentication failure with context.
+    case unauthorized(context: UnauthorizedContext)
 
     /// Represents an url error.
     case urlError
+
+    /// Represents network connectivity issues.
+    case networkError(_ details: String)
+
+    /// Represents server errors (5xx status codes).
+    case serverError(statusCode: Int, message: String)
 
     /// Provides a localized description of the error.
     public var errorDescription: String? {
@@ -47,6 +53,8 @@ public enum VRCKitError: Error, LocalizedError, Equatable {
         case .invalidRequest: "Invalid Request"
         case .unauthorized: "Unauthorized"
         case .urlError: "URL Error"
+        case .networkError: "Network Error"
+        case .serverError: "Server Error"
         }
     }
 
@@ -56,7 +64,32 @@ public enum VRCKitError: Error, LocalizedError, Equatable {
         case .apiError(let details): details
         case .invalidRequest(let details): details
         case .invalidResponse(let details): details
+        case .unauthorized(let context): context.localizedDescription
+        case .networkError(let details): details
+        case .serverError(let statusCode, let message): "Server Error (\(statusCode)): \(message)"
         default: errorDescription
+        }
+    }
+}
+
+/// Context information for unauthorized errors
+public enum UnauthorizedContext: Equatable {
+    case loginFailed(statusCode: Int, message: String)
+    case sessionExpired(statusCode: Int, message: String)
+    
+    public var localizedDescription: String {
+        switch self {
+        case .loginFailed(let statusCode, let message):
+            return "Login failed (\(statusCode)): \(message)"
+        case .sessionExpired(let statusCode, let message):
+            return "Session expired (\(statusCode)): \(message)"
+        }
+    }
+    
+    public var isLoginFailure: Bool {
+        switch self {
+        case .loginFailed: return true
+        case .sessionExpired: return false
         }
     }
 }

@@ -17,7 +17,7 @@ public final actor AuthenticationService: APIService, AuthenticationServiceProto
         let path = "\(authPath)/exists"
         let queryItems = [URLQueryItem(name: "username", value: userId.description)]
         let response = try await client.request(path: path, method: .get, queryItems: queryItems)
-        let result: ExistsResponse = try Serializer.shared.decode(response.data)
+        let result: ExistsResponse = try Serializer.shared.decode(response.data, httpResponse: response.response)
         return result.userExists
     }
 
@@ -25,14 +25,18 @@ public final actor AuthenticationService: APIService, AuthenticationServiceProto
         let path = "\(authPath)/user"
         let response = try await client.request(path: path, method: .get, basic: true)
         do {
-            let user: User = try Serializer.shared.decode(response.data)
+            let user: User = try Serializer.shared.decode(response.data, httpResponse: response.response, isLoginAttempt: true)
             return .left(user)
-        } catch _ as DecodingError {
-            let result: RequiresTwoFactorAuthResponse = try Serializer.shared.decode(response.data)
-            guard let requires = result.requires else {
-                throw VRCKitError.invalidResponse(String(describing: result.requires?.rawValue))
+        } catch {
+            do {
+                let result: RequiresTwoFactorAuthResponse = try Serializer.shared.decode(response.data)
+                guard let requires = result.requires else {
+                    throw VRCKitError.invalidResponse(String(describing: result.requires?.rawValue))
+                }
+                return .right(requires)
+            } catch {
+                throw error
             }
-            return .right(requires)
         }
     }
 
@@ -45,13 +49,13 @@ public final actor AuthenticationService: APIService, AuthenticationServiceProto
             method: .post,
             body: requestData
         )
-        let result: VerifyResponse = try Serializer.shared.decode(response.data)
+        let result: VerifyResponse = try Serializer.shared.decode(response.data, httpResponse: response.response, isLoginAttempt: true)
         return result.verified
     }
 
     public func verifyAuthToken() async throws -> Bool {
         let response = try await client.request(path: authPath, method: .get)
-        let result: VerifyAuthTokenResponse = try Serializer.shared.decode(response.data)
+        let result: VerifyAuthTokenResponse = try Serializer.shared.decode(response.data, httpResponse: response.response)
         return result.ok
     }
 

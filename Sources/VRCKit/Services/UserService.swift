@@ -15,16 +15,19 @@ public final actor UserService: APIService, UserServiceProtocol {
 
     public func fetchUser(userId: String) async throws -> UserDetail {
         let response = try await client.request(path: "\(path)/\(userId)", method: .get)
-        return try Serializer.shared.decode(response.data)
+        return try Serializer.shared.decode(response.data, httpResponse: response.response)
     }
 
     public func updateUser(id: String, editedInfo: EditableUserInfo) async throws {
         let requestData = try Serializer.shared.encode(editedInfo)
-        _ = try await client.request(
+        let response = try await client.request(
             path: "\(path)/\(id)",
             method: .put,
             body: requestData
         )
+        if response.response.statusCode >= 400 {
+            let _: SuccessResponse = try Serializer.shared.decode(response.data, httpResponse: response.response)
+        }
     }
 
     public func searchUser(displayName: String, n: Int = 100, offset: Int = 0) async throws -> [LimitedUser] {
@@ -34,6 +37,6 @@ public final actor UserService: APIService, UserServiceProtocol {
             URLQueryItem(name: "offset", value: String(offset))
         ]
         let response = try await client.request(path: path, method: .get, queryItems: queryItems)
-        return try Serializer.shared.decode(response.data)
+        return try Serializer.shared.decode(response.data, httpResponse: response.response)
     }
 }
