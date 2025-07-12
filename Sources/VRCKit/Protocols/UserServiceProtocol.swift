@@ -5,12 +5,20 @@
 //  Created by makinosp on 2024/07/14.
 //
 
+import Foundation
+
 public protocol UserServiceProtocol: Sendable {
     /// Fetches detailed information about a specific user.
     /// - Parameter userId: The ID of the user to retrieve.
     /// - Returns: A `UserDetail` object containing detailed information about the specified user.
     /// - Throws: An error if the request fails or decoding is unsuccessful.
     func fetchUser(userId: String) async throws -> UserDetail
+
+    /// Fetches raw JSON data for a specific user from VRChat API.
+    /// - Parameter userId: The ID of the user to retrieve.
+    /// - Returns: Raw JSON data as Data from VRChat API.
+    /// - Throws: An error if the request fails.
+    func fetchUserRawJSON(userId: String) async throws -> Data
 
     /// Updates the information for a specific user.
     /// - Parameters:

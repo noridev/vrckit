@@ -18,6 +18,15 @@ public final actor UserService: APIService, UserServiceProtocol {
         return try Serializer.shared.decode(response.data, httpResponse: response.response)
     }
 
+    /// Fetches raw JSON data for a specific user from VRChat API.
+    /// - Parameter userId: The ID of the user to retrieve.
+    /// - Returns: Raw JSON data as Data from VRChat API.
+    /// - Throws: An error if the request fails.
+    public func fetchUserRawJSON(userId: String) async throws -> Data {
+        let response = try await client.request(path: "\(path)/\(userId)", method: .get)
+        return response.data
+    }
+
     public func updateUser(id: String, editedInfo: EditableUserInfo) async throws {
         let requestData = try Serializer.shared.encode(editedInfo)
         let response = try await client.request(
