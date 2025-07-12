@@ -26,6 +26,7 @@ extension Friend {
         lastPlatform = try container.decodeIfPresent(String.self, forKey: .lastPlatform)
         let profilePicOverrideString = try container.decodeIfPresent(String.self, forKey: .profilePicOverride)
         profilePicOverride = profilePicOverrideString.flatMap { URL(string: $0) }
+        pronouns = try container.decodeIfPresent(String.self, forKey: .pronouns)
         status = try container.decode(UserStatus.self, forKey: .status)
         statusDescription = try container.decode(String.self, forKey: .statusDescription)
         tags = try container.decode(UserTags.self, forKey: .tags)

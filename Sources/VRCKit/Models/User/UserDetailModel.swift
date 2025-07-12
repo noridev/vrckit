@@ -22,6 +22,7 @@ public struct UserDetail: Sendable, ProfileDetailRepresentable, LocationRepresen
     public let lastLogin: Date?
     public let lastPlatform: String?
     public let profilePicOverride: URL?
+    public let pronouns: String?
     public let state: User.State
     public let status: UserStatus
     public var statusDescription: String
@@ -58,6 +59,7 @@ extension UserDetail {
         }
         try container.encodeIfPresent(lastPlatform, forKey: .lastPlatform)
         try container.encodeIfPresent(profilePicOverride, forKey: .profilePicOverride)
+        try container.encodeIfPresent(pronouns, forKey: .pronouns)
         try container.encode(state, forKey: .state)
         try container.encode(status, forKey: .status)
         try container.encode(statusDescription, forKey: .statusDescription)

@@ -30,6 +30,7 @@ public extension User {
         onlineFriends = user.onlineFriends
         pastDisplayNames = user.pastDisplayNames
         profilePicOverride = user.profilePicOverride
+        pronouns = editedUserInfo.pronouns
         state = user.state
         status = editedUserInfo.status
         statusDescription = editedUserInfo.statusDescription

@@ -18,6 +18,7 @@ public enum UserCodingKeys: String, CodingKey {
     case lastLogin
     case lastPlatform
     case profilePicOverride
+    case pronouns
     case state
     case status
     case statusDescription

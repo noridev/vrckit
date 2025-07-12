@@ -34,6 +34,7 @@ extension User: Encodable {
         try container.encode(onlineFriends, forKey: .onlineFriends)
         try container.encode(pastDisplayNames, forKey: .pastDisplayNames)
         try container.encodeIfPresent(profilePicOverride, forKey: .profilePicOverride)
+        try container.encodeIfPresent(pronouns, forKey: .pronouns)
         try container.encode(state, forKey: .state)
         try container.encode(status, forKey: .status)
         try container.encode(statusDescription, forKey: .statusDescription)

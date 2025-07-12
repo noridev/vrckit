@@ -22,6 +22,7 @@ public struct LimitedUser: Sendable, Identifiable, Hashable, ProfileElementRepre
     public let lastPlatform: String?
     public let platform: UserPlatform?
     public let profilePicOverride: URL?
+    public let pronouns: String?
     public let status: UserStatus
     public let statusDescription: String
     public let tags: UserTags
@@ -41,6 +42,7 @@ public struct LimitedUser: Sendable, Identifiable, Hashable, ProfileElementRepre
         case lastPlatform
         case platform
         case profilePicOverride
+        case pronouns
         case status
         case statusDescription
         case tags
@@ -68,6 +70,7 @@ extension LimitedUser: Codable {
         platform = platformString.flatMap { UserPlatform(rawValue: $0) }
         let profilePicOverrideString = try container.decodeIfPresent(String.self, forKey: .profilePicOverride)
         profilePicOverride = profilePicOverrideString.flatMap { URL(string: $0) }
+        pronouns = try container.decodeIfPresent(String.self, forKey: .pronouns)
         status = try container.decode(UserStatus.self, forKey: .status)
         statusDescription = try container.decode(String.self, forKey: .statusDescription)
         tags = try container.decode(UserTags.self, forKey: .tags)
@@ -94,6 +97,7 @@ extension LimitedUser: Codable {
         try container.encodeIfPresent(lastPlatform, forKey: .lastPlatform)
         try container.encodeIfPresent(platform, forKey: .platform)
         try container.encodeIfPresent(profilePicOverride, forKey: .profilePicOverride)
+        try container.encodeIfPresent(pronouns, forKey: .pronouns)
         try container.encode(status, forKey: .status)
         try container.encode(statusDescription, forKey: .statusDescription)
         try container.encode(tags, forKey: .tags)

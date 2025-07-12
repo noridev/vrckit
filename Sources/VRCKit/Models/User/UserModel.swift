@@ -33,6 +33,7 @@ public struct User: Sendable, ProfileDetailRepresentable {
     public let onlineFriends: [String]
     public let pastDisplayNames: [DisplayName]
     public let profilePicOverride: URL?
+    public let pronouns: String?
     public let state: State
     public let status: UserStatus
     public let statusDescription: String

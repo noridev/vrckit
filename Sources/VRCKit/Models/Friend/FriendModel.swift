@@ -24,6 +24,7 @@ public struct Friend: Sendable, ProfileElementRepresentable, LocationRepresentab
     public let lastPlatform: String?
     public let platform: UserPlatform?
     public let profilePicOverride: URL?
+    public let pronouns: String?
     public let status: UserStatus
     public let statusDescription: String
     public let tags: UserTags

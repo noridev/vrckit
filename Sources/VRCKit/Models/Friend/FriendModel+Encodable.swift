@@ -28,6 +28,7 @@ extension Friend {
         try container.encode(lastPlatform, forKey: .lastPlatform)
         try container.encode(platform, forKey: .platform)
         try container.encodeIfPresent(profilePicOverride, forKey: .profilePicOverride)
+        try container.encodeIfPresent(pronouns, forKey: .pronouns)
         try container.encode(status, forKey: .status)
         try container.encode(statusDescription, forKey: .statusDescription)
         try container.encode(tags, forKey: .tags)

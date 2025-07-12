@@ -24,6 +24,7 @@ extension UserDetail: Decodable {
         lastPlatform = try container.decodeIfPresent(String.self, forKey: .lastPlatform)
         let profilePicOverrideString = try container.decodeIfPresent(String.self, forKey: .profilePicOverride)
         profilePicOverride = profilePicOverrideString.flatMap { URL(string: $0) }
+        pronouns = try container.decodeIfPresent(String.self, forKey: .pronouns)
         state = try container.decode(User.State.self, forKey: .state)
         status = try container.decode(UserStatus.self, forKey: .status)
         statusDescription = try container.decode(String.self, forKey: .statusDescription)

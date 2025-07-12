@@ -22,6 +22,7 @@ public protocol ProfileElementRepresentable: Sendable, Hashable, Identifiable, I
     var lastPlatform: String? { get }
     var platform: UserPlatform? { get }
     var profilePicOverride: URL? { get }
+    var pronouns: String? { get }
     var status: UserStatus { get }
     var statusDescription: String { get }
     var tags: UserTags { get }
