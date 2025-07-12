@@ -21,6 +21,8 @@ extension Friend {
         isFriend = try container.decode(Bool.self, forKey: .isFriend)
         let lastLoginString = try container.decodeIfPresent(String.self, forKey: .lastLogin)
         lastLogin = lastLoginString.flatMap { DateFormatter.iso8601Full.date(from: $0) }
+        let lastActivityString = try container.decodeIfPresent(String.self, forKey: .lastActivity)
+        lastActivity = lastActivityString.flatMap { DateFormatter.iso8601Full.date(from: $0) }
         lastPlatform = try container.decodeIfPresent(String.self, forKey: .lastPlatform)
         let profilePicOverrideString = try container.decodeIfPresent(String.self, forKey: .profilePicOverride)
         profilePicOverride = profilePicOverrideString.flatMap { URL(string: $0) }

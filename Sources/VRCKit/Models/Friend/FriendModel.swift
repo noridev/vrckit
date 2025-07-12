@@ -20,6 +20,7 @@ public struct Friend: Sendable, ProfileElementRepresentable, LocationRepresentab
     public let id: String
     public let isFriend: Bool
     public let lastLogin: Date?
+    public let lastActivity: Date?
     public let lastPlatform: String?
     public let platform: UserPlatform?
     public let profilePicOverride: URL?

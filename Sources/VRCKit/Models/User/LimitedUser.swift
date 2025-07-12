@@ -18,6 +18,7 @@ public struct LimitedUser: Sendable, Identifiable, Hashable, ProfileElementRepre
     public let id: String
     public let isFriend: Bool
     public let lastLogin: Date?
+    public let lastActivity: Date?
     public let lastPlatform: String?
     public let platform: UserPlatform?
     public let profilePicOverride: URL?
@@ -36,6 +37,7 @@ public struct LimitedUser: Sendable, Identifiable, Hashable, ProfileElementRepre
         case id
         case isFriend
         case lastLogin
+        case lastActivity
         case lastPlatform
         case platform
         case profilePicOverride
@@ -59,6 +61,8 @@ extension LimitedUser: Codable {
         isFriend = try container.decode(Bool.self, forKey: .isFriend)
         let lastLoginString = try container.decodeIfPresent(String.self, forKey: .lastLogin)
         lastLogin = lastLoginString.flatMap { DateFormatter.iso8601Full.date(from: $0) }
+        let lastActivityString = try container.decodeIfPresent(String.self, forKey: .lastActivity)
+        lastActivity = lastActivityString.flatMap { DateFormatter.iso8601Full.date(from: $0) }
         lastPlatform = try container.decodeIfPresent(String.self, forKey: .lastPlatform)
         let platformString = try container.decodeIfPresent(String.self, forKey: .platform)
         platform = platformString.flatMap { UserPlatform(rawValue: $0) }
@@ -70,5 +74,30 @@ extension LimitedUser: Codable {
         let userIconString = try container.decodeIfPresent(String.self, forKey: .userIcon)
         userIcon = userIconString.flatMap { URL(string: $0) }
         friendKey = try container.decodeIfPresent(String.self, forKey: .friendKey)
+    }
+
+    public func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encodeIfPresent(bio, forKey: .bio)
+        try container.encode(bioLinks, forKey: .bioLinks)
+        try container.encodeIfPresent(avatarImageUrl, forKey: .avatarImageUrl)
+        try container.encodeIfPresent(avatarThumbnailUrl, forKey: .avatarThumbnailUrl)
+        try container.encode(displayName, forKey: .displayName)
+        try container.encode(id, forKey: .id)
+        try container.encode(isFriend, forKey: .isFriend)
+        if let lastLogin = lastLogin {
+            try container.encode(DateFormatter.iso8601Full.string(from: lastLogin), forKey: .lastLogin)
+        }
+        if let lastActivity = lastActivity {
+            try container.encode(DateFormatter.iso8601Full.string(from: lastActivity), forKey: .lastActivity)
+        }
+        try container.encodeIfPresent(lastPlatform, forKey: .lastPlatform)
+        try container.encodeIfPresent(platform, forKey: .platform)
+        try container.encodeIfPresent(profilePicOverride, forKey: .profilePicOverride)
+        try container.encode(status, forKey: .status)
+        try container.encode(statusDescription, forKey: .statusDescription)
+        try container.encode(tags, forKey: .tags)
+        try container.encodeIfPresent(userIcon, forKey: .userIcon)
+        try container.encodeIfPresent(friendKey, forKey: .friendKey)
     }
 }

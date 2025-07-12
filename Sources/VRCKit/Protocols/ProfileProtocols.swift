@@ -18,6 +18,7 @@ public protocol ProfileElementRepresentable: Sendable, Hashable, Identifiable, I
     var id: Self.ID { get }
     var isFriend: Bool { get }
     var lastLogin: Date? { get }
+    var lastActivity: Date? { get }
     var lastPlatform: String? { get }
     var platform: UserPlatform? { get }
     var profilePicOverride: URL? { get }
@@ -32,7 +33,6 @@ public protocol ProfileElementRepresentable: Sendable, Hashable, Identifiable, I
 /// This protocol extends ProfileElementRepresentable and can be adopted by structures like User and UserDetail.
 public protocol ProfileDetailRepresentable: ProfileElementRepresentable {
     var dateJoined: Date? { get }
-    var lastActivity: Date? { get }
     var state: User.State { get }
     var ageVerified: Bool { get }
     var ageVerificationStatus: AgeVerificationStatus { get }
