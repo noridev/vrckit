@@ -11,6 +11,7 @@ public extension User {
         ageVerificationStatus = user.ageVerificationStatus
         ageVerified = user.ageVerified
         allowAvatarCopying = user.allowAvatarCopying
+        badges = user.badges
         bio = editedUserInfo.bio
         bioLinks = SafeDecodingArray(wrappedValue: editedUserInfo.bioLinks)
         currentAvatar = user.currentAvatar

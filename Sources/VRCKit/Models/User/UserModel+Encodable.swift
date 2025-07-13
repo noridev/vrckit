@@ -12,6 +12,7 @@ extension User: Encodable {
         var container = encoder.container(keyedBy: UserCodingKeys.self)
         try container.encode(activeFriends, forKey: .activeFriends)
         try container.encode(allowAvatarCopying, forKey: .allowAvatarCopying)
+        try container.encodeIfPresent(badges, forKey: .badges)
         try container.encodeIfPresent(bio, forKey: .bio)
         try container.encode(bioLinks.wrappedValue, forKey: .bioLinks)
         try container.encode(currentAvatar, forKey: .currentAvatar)

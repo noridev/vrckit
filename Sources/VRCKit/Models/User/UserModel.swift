@@ -14,6 +14,7 @@ public struct User: Sendable, ProfileDetailRepresentable {
     public let ageVerificationStatus: AgeVerificationStatus
     public let ageVerified: Bool
     public let allowAvatarCopying: Bool
+    public let badges: [Badge]
     public let bio: String?
     public var bioLinks: SafeDecodingArray<URL>
     public let currentAvatar: String

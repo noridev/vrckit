@@ -12,6 +12,7 @@ extension UserDetail: Decodable {
         let container = try decoder.container(keyedBy: UserCodingKeys.self)
         ageVerificationStatus = try container.decode(AgeVerificationStatus.self, forKey: .ageVerificationStatus)
         ageVerified = try container.decode(Bool.self, forKey: .ageVerified)
+        badges = try container.decodeIfPresent([Badge].self, forKey: .badges) ?? []
         bio = try container.decodeIfPresent(String.self, forKey: .bio)
         bioLinks = try container.decodeSafeNullableArray(URL.self, forKey: .bioLinks)
         avatarImageUrl = try? container.decodeIfPresent(URL.self, forKey: .currentAvatarImageUrl)

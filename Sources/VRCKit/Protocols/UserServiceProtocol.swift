@@ -32,4 +32,13 @@ public protocol UserServiceProtocol: Sendable {
     /// - Returns: An array of `LimitedUser` objects matching the search query.
     /// - Throws: An error if the request fails or decoding is unsuccessful.
     func searchUser(displayName: String, n: Int, offset: Int) async throws -> [LimitedUser]
+    
+    /// Updates a specific badge's showcased and hidden status.
+    /// - Parameters:
+    ///   - currentUserId: The ID of the user who currently owns the badge.
+    ///   - badgeId: The ID of the badge to update.
+    ///   - request: The `BadgeUpdateRequest` containing the updated badge information.
+    /// - Returns: A `BadgePartialUpdate` containing the updated badge fields.
+    /// - Throws: An error if the request fails or encoding/decoding is unsuccessful.
+    func updateBadge(currentUserId: String, badgeId: String, request: BadgeUpdateRequest) async throws -> BadgePartialUpdate
 }

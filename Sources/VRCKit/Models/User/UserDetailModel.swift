@@ -12,6 +12,7 @@ import MemberwiseInit
 public struct UserDetail: Sendable, ProfileDetailRepresentable, LocationRepresentable, Encodable {
     public let ageVerificationStatus: AgeVerificationStatus
     public let ageVerified: Bool
+    public let badges: [Badge]
     public var bio: String?
     public var bioLinks: SafeDecodingArray<URL>
     public let avatarImageUrl: URL?
@@ -47,6 +48,7 @@ extension UserDetail {
         var container = encoder.container(keyedBy: UserCodingKeys.self)
         try container.encode(ageVerificationStatus, forKey: .ageVerificationStatus)
         try container.encode(ageVerified, forKey: .ageVerified)
+        try container.encodeIfPresent(badges, forKey: .badges)
         try container.encodeIfPresent(bio, forKey: .bio)
         try container.encode(bioLinks.wrappedValue, forKey: .bioLinks)
         try container.encodeIfPresent(avatarImageUrl, forKey: .currentAvatarImageUrl)

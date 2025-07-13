@@ -48,4 +48,14 @@ public final actor UserService: APIService, UserServiceProtocol {
         let response = try await client.request(path: path, method: .get, queryItems: queryItems)
         return try Serializer.shared.decode(response.data, httpResponse: response.response)
     }
+    
+    public func updateBadge(currentUserId: String, badgeId: String, request: BadgeUpdateRequest) async throws -> BadgePartialUpdate {
+        let requestData = try Serializer.shared.encode(request)
+        let response = try await client.request(
+            path: "\(path)/\(currentUserId)/badges/\(badgeId)",
+            method: .put,
+            body: requestData
+        )
+        return try Serializer.shared.decode(response.data, httpResponse: response.response)
+    }
 }

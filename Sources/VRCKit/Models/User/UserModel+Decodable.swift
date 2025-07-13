@@ -14,6 +14,7 @@ extension User: Decodable {
         ageVerified = try container.decode(Bool.self, forKey: .ageVerified)
         activeFriends = try container.decode([String].self, forKey: .activeFriends)
         allowAvatarCopying = try container.decode(Bool.self, forKey: .allowAvatarCopying)
+        badges = try container.decodeIfPresent([Badge].self, forKey: .badges) ?? []
         bio = try container.decodeIfPresent(String.self, forKey: .bio)
         bioLinks = try container.decodeSafeNullableArray(URL.self, forKey: .bioLinks)
         currentAvatar = try container.decode(String.self, forKey: .currentAvatar)
