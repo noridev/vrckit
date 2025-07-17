@@ -24,7 +24,13 @@ public protocol GroupServiceProtocol: Sendable {
     /// - Parameter groupId: The ID of the group to retrieve.
     /// - Returns: A `VRCGroup` object containing detailed information about the specified group.
     /// - Throws: An error if the request fails or decoding is unsuccessful.
-    func fetchGroup(groupId: String) async throws -> VRCGroup
+    func fetchGroup(groupId: String, includeRoles: Bool, includeMembers: Bool) async throws -> VRCGroup
+
+    /// Fetches a list of all members in a specific group.
+    /// - Parameter groupId: The ID of the group to retrieve members from.
+    /// - Returns: An array of `GroupMembership` objects representing the members of the group.
+    /// - Throws: An error if the request fails or decoding is unsuccessful.
+    func fetchGroupMembers(groupId: String) async throws -> [GroupMembership]
     
     /// Fetches raw JSON data for a specific group.
     /// - Parameter groupId: The ID of the group to retrieve raw JSON for.

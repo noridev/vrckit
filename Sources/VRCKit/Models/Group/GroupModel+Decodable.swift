@@ -34,6 +34,7 @@ extension VRCGroup: Decodable {
         ownerId = try container.decode(String.self, forKey: .ownerId)
         privacy = try container.decode(GroupPrivacy.self, forKey: .privacy)
         memberCount = try container.decode(Int.self, forKey: .memberCount)
+        onlineMemberCount = try container.decodeIfPresent(Int.self, forKey: .onlineMemberCount)
         
         if let memberVisibilityValue = try? container.decode(GroupMembershipVisibility.self, forKey: .memberVisibility) {
             memberVisibility = memberVisibilityValue
@@ -45,7 +46,26 @@ extension VRCGroup: Decodable {
             }
         }
         
-        myMember = try? container.decode(GroupMembership.self, forKey: .myMember)
+        if let myMemberValue = try? container.decode(GroupMembership.self, forKey: .myMember) {
+            print("✅ [GroupModel] Successfully decoded myMember: \(myMemberValue)")
+            myMember = myMemberValue
+        } else {
+            print("⚠️ [GroupModel] Failed to decode myMember, creating default")
+            myMember = GroupMembership(
+                id: "default_member_id",
+                groupId: id,
+                userId: "current_user",
+                isRepresenting: false,
+                isSubscribedToAnnouncements: true,
+                visibility: memberVisibility,
+                isSubscribedToEvents: true,
+                roleIds: [],
+                joinedAt: nil,
+                rolePermissions: nil,
+                roleOrder: nil
+            )
+        }
+        
         mutualGroup = try container.decodeIfPresent(Bool.self, forKey: .mutualGroup) ?? false
         
         if let isRepresentingValue = try? container.decode(Bool.self, forKey: .isRepresenting) {

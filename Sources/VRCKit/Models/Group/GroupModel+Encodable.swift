@@ -23,6 +23,7 @@ extension VRCGroup: Encodable {
         try container.encode(ownerId, forKey: .ownerId)
         try container.encode(privacy, forKey: .privacy)
         try container.encode(memberCount, forKey: .memberCount)
+        try container.encodeIfPresent(onlineMemberCount, forKey: .onlineMemberCount)
         try container.encode(memberVisibility, forKey: .memberVisibility)
         try container.encode(mutualGroup, forKey: .mutualGroup)
         try container.encode(isRepresenting, forKey: .isRepresenting)

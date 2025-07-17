@@ -20,6 +20,7 @@ public struct VRCGroup: Sendable, Identifiable {
     public let bannerUrl: URL?
     public let iconId: String?
     public let iconUrl: URL?
+    public let onlineMemberCount: Int?
     public let ownerId: String
     public let privacy: GroupPrivacy
     public let memberCount: Int
@@ -44,7 +45,7 @@ public struct VRCGroup: Sendable, Identifiable {
     enum CodingKeys: String, CodingKey {
         case id, groupId, name, shortCode, discriminator, description
         case bannerId, bannerUrl, iconId, iconUrl, ownerId, privacy
-        case memberCount, memberVisibility, mutualGroup, isRepresenting
+        case memberCount, onlineMemberCount, memberVisibility, mutualGroup, isRepresenting
         case lastPostCreatedAt, lastPostReadAt, rules, isVerified
         case joinState, tags, languages, galleries, createdAt, updatedAt
         case memberships, roles, representable, myMember
@@ -74,7 +75,6 @@ public struct GroupGallery: Codable, Sendable, Identifiable {
     public let updatedAt: Date?
 }
 
-@MemberwiseInit(.public)
 public struct GroupMembership: Codable, Sendable {
     public let id: String
     public let groupId: String
@@ -87,6 +87,123 @@ public struct GroupMembership: Codable, Sendable {
     public let joinedAt: Date?
     public let rolePermissions: [String]?
     public let roleOrder: [String]?
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        print("🔍 [GroupMembership] Starting to decode GroupMembership")
+        
+        if let idValue = try? container.decode(String.self, forKey: .id) {
+            id = idValue
+            print("✅ [GroupMembership] Successfully decoded id: \(idValue)")
+        } else {
+            id = "default_member_id"
+            print("⚠️ [GroupMembership] Failed to decode id, using default")
+        }
+        
+        if let groupIdValue = try? container.decode(String.self, forKey: .groupId) {
+            groupId = groupIdValue
+            print("✅ [GroupMembership] Successfully decoded groupId: \(groupIdValue)")
+        } else {
+            groupId = "default_group_id"
+            print("⚠️ [GroupMembership] Failed to decode groupId, using default")
+        }
+        
+        if let userIdValue = try? container.decode(String.self, forKey: .userId) {
+            userId = userIdValue
+            print("✅ [GroupMembership] Successfully decoded userId: \(userIdValue)")
+        } else {
+            userId = "default_user_id"
+            print("⚠️ [GroupMembership] Failed to decode userId, using default")
+        }
+        
+        if let isRepresentingValue = try? container.decode(Bool.self, forKey: .isRepresenting) {
+            isRepresenting = isRepresentingValue
+            print("✅ [GroupMembership] Successfully decoded isRepresenting: \(isRepresentingValue)")
+        } else {
+            isRepresenting = false
+            print("⚠️ [GroupMembership] Failed to decode isRepresenting, using default: false")
+        }
+        
+        if let isSubscribedToAnnouncementsValue = try? container.decode(Bool.self, forKey: .isSubscribedToAnnouncements) {
+            isSubscribedToAnnouncements = isSubscribedToAnnouncementsValue
+            print("✅ [GroupMembership] Successfully decoded isSubscribedToAnnouncements: \(isSubscribedToAnnouncementsValue)")
+        } else {
+            isSubscribedToAnnouncements = true
+            print("⚠️ [GroupMembership] Failed to decode isSubscribedToAnnouncements, using default: true")
+        }
+        
+        if let isSubscribedToEventsValue = try? container.decode(Bool.self, forKey: .isSubscribedToEvents) {
+            isSubscribedToEvents = isSubscribedToEventsValue
+            print("✅ [GroupMembership] Successfully decoded isSubscribedToEvents: \(isSubscribedToEventsValue)")
+        } else {
+            isSubscribedToEvents = true
+            print("⚠️ [GroupMembership] Failed to decode isSubscribedToEvents, using default: true")
+        }
+        
+        if let visibilityValue = try? container.decode(GroupMembershipVisibility.self, forKey: .visibility) {
+            visibility = visibilityValue
+            print("✅ [GroupMembership] Successfully decoded visibility: \(visibilityValue)")
+        } else {
+            visibility = .visible
+            print("⚠️ [GroupMembership] Failed to decode visibility, using default: .visible")
+        }
+        
+        if let roleIdsValue = try? container.decode([String].self, forKey: .roleIds) {
+            roleIds = roleIdsValue
+            print("✅ [GroupMembership] Successfully decoded roleIds: \(roleIdsValue)")
+        } else {
+            roleIds = []
+            print("⚠️ [GroupMembership] Failed to decode roleIds, using default: []")
+        }
+        
+        if let joinedAtString = try? container.decode(String.self, forKey: .joinedAt) {
+            joinedAt = DateFormatter.iso8601Full.date(from: joinedAtString)
+            print("✅ [GroupMembership] Successfully decoded joinedAt from string: \(joinedAtString) -> \(joinedAt?.description ?? "nil")")
+        } else if let joinedAtValue = try? container.decode(Date.self, forKey: .joinedAt) {
+            joinedAt = joinedAtValue
+            print("✅ [GroupMembership] Successfully decoded joinedAt as Date: \(joinedAtValue)")
+        } else {
+            joinedAt = nil
+            print("⚠️ [GroupMembership] Failed to decode joinedAt, using default: nil")
+        }
+        
+        rolePermissions = try container.decodeIfPresent([String].self, forKey: .rolePermissions)
+        roleOrder = try container.decodeIfPresent([String].self, forKey: .roleOrder)
+        
+        print("✅ [GroupMembership] Completed decoding GroupMembership")
+    }
+    
+    public init(
+        id: String,
+        groupId: String,
+        userId: String,
+        isRepresenting: Bool,
+        isSubscribedToAnnouncements: Bool,
+        visibility: GroupMembershipVisibility,
+        isSubscribedToEvents: Bool,
+        roleIds: [String],
+        joinedAt: Date?,
+        rolePermissions: [String]?,
+        roleOrder: [String]?
+    ) {
+        self.id = id
+        self.groupId = groupId
+        self.userId = userId
+        self.isRepresenting = isRepresenting
+        self.isSubscribedToAnnouncements = isSubscribedToAnnouncements
+        self.visibility = visibility
+        self.isSubscribedToEvents = isSubscribedToEvents
+        self.roleIds = roleIds
+        self.joinedAt = joinedAt
+        self.rolePermissions = rolePermissions
+        self.roleOrder = roleOrder
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case id, groupId, userId, isRepresenting, isSubscribedToAnnouncements
+        case visibility, isSubscribedToEvents, roleIds, joinedAt, rolePermissions, roleOrder
+    }
 }
 
 @MemberwiseInit(.public)

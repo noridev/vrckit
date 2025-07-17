@@ -50,8 +50,23 @@ public final actor GroupService: APIService, GroupServiceProtocol {
         }
     }
     
-    public func fetchGroup(groupId: String) async throws -> VRCGroup {
-        let response = try await client.request(path: "groups/\(groupId)", method: .get)
+    public func fetchGroup(groupId: String, includeRoles: Bool = true, includeMembers: Bool = true) async throws -> VRCGroup {
+        var queryItems: [URLQueryItem] = []
+        
+        if includeRoles {
+            queryItems.append(URLQueryItem(name: "includeRoles", value: "true"))
+        }
+        
+        if includeMembers {
+            queryItems.append(URLQueryItem(name: "includeMembers", value: "true"))
+        }
+        
+        let response = try await client.request(path: "groups/\(groupId)", method: .get, queryItems: queryItems)
+        return try Serializer.shared.decode(response.data, httpResponse: response.response)
+    }
+    
+    public func fetchGroupMembers(groupId: String) async throws -> [GroupMembership] {
+        let response = try await client.request(path: "groups/\(groupId)/members", method: .get)
         return try Serializer.shared.decode(response.data, httpResponse: response.response)
     }
     
