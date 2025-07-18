@@ -32,6 +32,12 @@ public protocol GroupServiceProtocol: Sendable {
     /// - Throws: An error if the request fails or decoding is unsuccessful.
     func fetchGroupMembers(groupId: String) async throws -> [GroupMembership]
     
+    /// Fetches a list of posts in a specific group.
+    /// - Parameter groupId: The ID of the group to retrieve posts from.
+    /// - Returns: An array of `GroupPost` objects representing the posts of the group.
+    /// - Throws: An error if the request fails or decoding is unsuccessful.
+    func fetchGroupPosts(groupId: String) async throws -> [GroupPost]
+    
     /// Fetches raw JSON data for a specific group.
     /// - Parameter groupId: The ID of the group to retrieve raw JSON for.
     /// - Returns: Raw JSON data as `Data`.

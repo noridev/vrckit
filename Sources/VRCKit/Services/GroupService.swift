@@ -70,6 +70,19 @@ public final actor GroupService: APIService, GroupServiceProtocol {
         return try Serializer.shared.decode(response.data, httpResponse: response.response)
     }
     
+    public func fetchGroupPosts(groupId: String) async throws -> [GroupPost] {
+        let response = try await client.request(path: "groups/\(groupId)/posts", method: .get)
+        
+        // Parse the response as { "posts": [...] }
+        let json = try JSONSerialization.jsonObject(with: response.data) as? [String: Any]
+        guard let postsData = json?["posts"] else {
+            throw VRCKitError.invalidResponse("No 'posts' key found in response")
+        }
+        
+        let postsJsonData = try JSONSerialization.data(withJSONObject: postsData)
+        return try Serializer.shared.decode(postsJsonData, httpResponse: response.response)
+    }
+    
     public func fetchGroupRawJSON(groupId: String) async throws -> Data {
         let response = try await client.request(path: "groups/\(groupId)", method: .get)
         return response.data
