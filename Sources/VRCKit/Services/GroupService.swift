@@ -83,6 +83,11 @@ public final actor GroupService: APIService, GroupServiceProtocol {
         return try Serializer.shared.decode(postsJsonData, httpResponse: response.response)
     }
     
+    public func fetchGroupGalleryImages(groupId: String, galleryId: String) async throws -> [GroupGalleryImage] {
+        let response = try await client.request(path: "groups/\(groupId)/galleries/\(galleryId)", method: .get)
+        return try Serializer.shared.decode(response.data, httpResponse: response.response)
+    }
+    
     public func fetchGroupRawJSON(groupId: String) async throws -> Data {
         let response = try await client.request(path: "groups/\(groupId)", method: .get)
         return response.data

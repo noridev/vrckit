@@ -38,6 +38,14 @@ public protocol GroupServiceProtocol: Sendable {
     /// - Throws: An error if the request fails or decoding is unsuccessful.
     func fetchGroupPosts(groupId: String) async throws -> [GroupPost]
     
+    /// Fetches all images from a specific group gallery.
+    /// - Parameters:
+    ///   - groupId: The ID of the group.
+    ///   - galleryId: The ID of the gallery.
+    /// - Returns: An array of `GroupGalleryImage` objects.
+    /// - Throws: An error if the request fails or decoding is unsuccessful.
+    func fetchGroupGalleryImages(groupId: String, galleryId: String) async throws -> [GroupGalleryImage]
+    
     /// Fetches raw JSON data for a specific group.
     /// - Parameter groupId: The ID of the group to retrieve raw JSON for.
     /// - Returns: Raw JSON data as `Data`.
