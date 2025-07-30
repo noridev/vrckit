@@ -34,6 +34,7 @@ public struct VRCGroup: Sendable, Identifiable {
     public let joinState: GroupJoinState?
     public let tags: [String]?
     public let languages: [String]?
+    public let links: [String]?
     public let galleries: [GroupGallery]?
     public let createdAt: Date?
     public let updatedAt: Date?
@@ -47,7 +48,7 @@ public struct VRCGroup: Sendable, Identifiable {
         case bannerId, bannerUrl, iconId, iconUrl, ownerId, privacy
         case memberCount, onlineMemberCount, memberVisibility, mutualGroup, isRepresenting
         case lastPostCreatedAt, lastPostReadAt, rules, isVerified
-        case joinState, tags, languages, galleries, createdAt, updatedAt
+        case joinState, tags, languages, links, galleries, createdAt, updatedAt
         case memberships, roles, representable, myMember
     }
     
@@ -58,6 +59,12 @@ public struct VRCGroup: Sendable, Identifiable {
             let rawValue = "language_\(langString.prefix(3).lowercased())"
             return LanguageTag(rawValue: rawValue)
         }
+    }
+    
+    public var linkUrls: [URL] {
+        guard let links = links else { return [] }
+        
+        return links.compactMap { URL(string: $0) }
     }
 }
 

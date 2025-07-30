@@ -27,10 +27,13 @@ public protocol GroupServiceProtocol: Sendable {
     func fetchGroup(groupId: String, includeRoles: Bool, includeMembers: Bool) async throws -> VRCGroup
 
     /// Fetches a list of all members in a specific group.
-    /// - Parameter groupId: The ID of the group to retrieve members from.
+    /// - Parameters:
+    ///   - groupId: The ID of the group to retrieve members from.
+    ///   - offset: The offset to start fetching members from.
+    ///   - n: The number of members to fetch.
     /// - Returns: An array of `GroupMembership` objects representing the members of the group.
     /// - Throws: An error if the request fails or decoding is unsuccessful.
-    func fetchGroupMembers(groupId: String) async throws -> [GroupMembership]
+    func fetchGroupMembers(groupId: String, offset: Int, n: Int) async throws -> [GroupMembership]
     
     /// Fetches a list of posts in a specific group.
     /// - Parameter groupId: The ID of the group to retrieve posts from.
@@ -51,4 +54,12 @@ public protocol GroupServiceProtocol: Sendable {
     /// - Returns: Raw JSON data as `Data`.
     /// - Throws: An error if the request fails.
     func fetchGroupRawJSON(groupId: String) async throws -> Data
+    
+    /// Fetches a list of instances for a specific group for the given user.
+    /// - Parameters:
+    ///   - userId: The ID of the user whose group instances to fetch.
+    ///   - groupId: The ID of the group.
+    /// - Returns: An array of `Instance` objects representing the group's instances.
+    /// - Throws: An error if the request fails or decoding is unsuccessful.
+    func fetchGroupInstances(userId: String, groupId: String) async throws -> [Instance]
 }

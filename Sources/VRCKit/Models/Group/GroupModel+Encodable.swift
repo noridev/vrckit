@@ -34,6 +34,7 @@ extension VRCGroup: Encodable {
         try container.encodeIfPresent(joinState, forKey: .joinState)
         try container.encodeIfPresent(tags, forKey: .tags)
         try container.encodeIfPresent(languages, forKey: .languages)
+        try container.encodeIfPresent(links, forKey: .links)
         try container.encodeIfPresent(galleries, forKey: .galleries)
         try container.encodeIfPresent(createdAt, forKey: .createdAt)
         try container.encodeIfPresent(updatedAt, forKey: .updatedAt)

@@ -11,6 +11,7 @@ import MemberwiseInit
 @MemberwiseInit(.public)
 public struct Instance: Sendable, Identifiable, Hashable, Decodable {
     public let active: Bool
+    public let ageGate: Bool?
     public let capacity: Int
     public let full: Bool
     public let groupAccessType: GroupAccessType?
@@ -26,7 +27,7 @@ public struct Instance: Sendable, Identifiable, Hashable, Decodable {
     public let tags: [String]
     public let type: InstanceType
     public let userCount: Int
-    public let world: World
+    public let world: World?
 
     public struct Platforms: Sendable, Hashable, Codable {
         @Init(default: 0) public let android: Int
@@ -55,7 +56,8 @@ extension Instance: ImageUrlRepresentable {
         case .private, .traveling:
             return Const.privateWorldImageUrl
         case .id:
-            guard let url = world.thumbnailImageUrl else { return nil }
+            guard let world = world,
+                  let url = world.thumbnailImageUrl else { return nil }
             return replaceImageUrl(url: url, resolution: resolution)
         }
     }

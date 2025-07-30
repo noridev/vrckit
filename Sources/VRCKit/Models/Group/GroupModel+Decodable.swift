@@ -84,6 +84,7 @@ extension VRCGroup: Decodable {
         joinState = try container.decodeIfPresent(GroupJoinState.self, forKey: .joinState)
         tags = try container.decodeIfPresent([String].self, forKey: .tags)
         languages = try container.decodeIfPresent([String].self, forKey: .languages)
+        links = try container.decodeIfPresent([String].self, forKey: .links)
         galleries = try container.decodeIfPresent([GroupGallery].self, forKey: .galleries)
         createdAt = try container.decodeIfPresent(Date.self, forKey: .createdAt)
         updatedAt = try container.decodeIfPresent(Date.self, forKey: .updatedAt)

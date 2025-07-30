@@ -65,8 +65,16 @@ public final actor GroupService: APIService, GroupServiceProtocol {
         return try Serializer.shared.decode(response.data, httpResponse: response.response)
     }
     
-    public func fetchGroupMembers(groupId: String) async throws -> [GroupMembership] {
-        let response = try await client.request(path: "groups/\(groupId)/members", method: .get)
+    public func fetchGroupMembers(groupId: String, offset: Int, n: Int) async throws -> [GroupMembership] {
+        let queryItems = [
+            URLQueryItem(name: "offset", value: String(offset)),
+            URLQueryItem(name: "n", value: String(n))
+        ]
+        let response = try await client.request(
+            path: "groups/\(groupId)/members",
+            method: .get,
+            queryItems: queryItems
+        )
         return try Serializer.shared.decode(response.data, httpResponse: response.response)
     }
     
@@ -91,5 +99,21 @@ public final actor GroupService: APIService, GroupServiceProtocol {
     public func fetchGroupRawJSON(groupId: String) async throws -> Data {
         let response = try await client.request(path: "groups/\(groupId)", method: .get)
         return response.data
+    }
+    
+    public func fetchGroupInstances(userId: String, groupId: String) async throws -> [Instance] {
+        let response = try await client.request(
+            path: "users/\(userId)/instances/groups/\(groupId)",
+            method: .get
+        )
+        if let jsonString = String(data: response.data, encoding: .utf8) {
+            print("🔍 [fetchGroupInstances] Raw response: \(jsonString)")
+        }
+        let json = try JSONSerialization.jsonObject(with: response.data) as? [String: Any]
+        guard let instancesData = json?["instances"] else {
+            throw VRCKitError.invalidResponse("No 'instances' key found in response")
+        }
+        let instancesJsonData = try JSONSerialization.data(withJSONObject: instancesData)
+        return try Serializer.shared.decode(instancesJsonData)
     }
 }

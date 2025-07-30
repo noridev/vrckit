@@ -49,6 +49,38 @@ public extension World {
         urlComponents?.queryItems = [URLQueryItem(name: "worldId", value: id)]
         return urlComponents?.url
     }
+
+    static var placeholder: World {
+        World(
+            id: "wrld_placeholder",
+            name: "알 수 없는 월드",
+            description: "정보 없음",
+            featured: false,
+            authorId: "usr_placeholder",
+            authorName: "Unknown",
+            capacity: 0,
+            tags: [],
+            releaseStatus: .public,
+            imageUrl: nil,
+            thumbnailImageUrl: nil,
+            namespace: nil,
+            organization: "",
+            previewYoutubeId: nil,
+            favorites: 0,
+            createdAt: OptionalISO8601Date(),
+            updatedAt: OptionalISO8601Date(),
+            publicationDate: OptionalISO8601Date(),
+            labsPublicationDate: OptionalISO8601Date(),
+            visits: 0,
+            popularity: 0,
+            heat: 0,
+            version: 1,
+            unityPackages: [],
+            occupants: 0,
+            privateOccupants: 0,
+            publicOccupants: 0
+        )
+    }
 }
 
 public extension World {
