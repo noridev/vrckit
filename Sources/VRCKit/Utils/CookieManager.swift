@@ -19,9 +19,17 @@ public final actor CookieManager {
     init(domainURL: String) {
         self.domainURL = domainURL
         let fileManager = FileManager.default
+        
+        #if os(iOS)
+        let configDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+            .appendingPathComponent(".config")
+            .appendingPathComponent("vrckit")
+        #else
         let configDir = fileManager.homeDirectoryForCurrentUser
             .appendingPathComponent(".config")
             .appendingPathComponent("vrckit")
+        #endif
+        
         self.credentialsPath = configDir.appendingPathComponent("credentials.json")
         Task { await self.loadCookies() }
     }
