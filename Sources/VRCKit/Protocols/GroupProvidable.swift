@@ -1,5 +1,5 @@
 //
-//  GroupServiceProtocol.swift
+//  GroupProvidable.swift
 //  VRCKit
 //
 //  Created by NoriDev on 7/13/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol GroupServiceProtocol: Sendable {
+public protocol GroupProvidable: Sendable {
     /// Fetches all groups that a user is a member of.
     /// - Parameter userId: The ID of the user to get groups for.
     /// - Returns: An array of `VRCGroup` objects representing the user's groups.

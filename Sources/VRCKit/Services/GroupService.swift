@@ -9,7 +9,7 @@ import Foundation
 import MemberwiseInit
 
 @MemberwiseInit(.public)
-public final actor GroupService: APIService, GroupServiceProtocol {
+public final actor GroupService: APIService, GroupProvidable {
     public let client: APIClient
     private let path = "users"
 
