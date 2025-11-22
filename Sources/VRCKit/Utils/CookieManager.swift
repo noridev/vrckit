@@ -11,10 +11,10 @@ import FoundationNetworking
 #endif
 import MemberwiseInit
 
-@MemberwiseInit
 public final actor CookieManager {
-    @Init(.internal) private var domainURL: String
-    @Init(.internal) private let credentialsPath: URL
+    private var domainURL: String
+    private let credentialsPath: URL
+    private var isLoaded = false
 
     init(domainURL: String) {
         self.domainURL = domainURL
@@ -29,6 +29,12 @@ public final actor CookieManager {
         #endif
         self.credentialsPath = configDir.appendingPathComponent("credentials.json")
         Task { await self.loadCookies() }
+    }
+
+    /// Ensures cookies are loaded before proceeding
+    public func ensureLoaded() {
+        guard !isLoaded else { return }
+        loadCookies()
     }
 
     /// Retrieves the cookies stored for the VRChat API domain.
@@ -63,20 +69,31 @@ public final actor CookieManager {
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         }
         try data.write(to: credentialsPath)
+        print("[CookieManager] Saved \(serializableCookies.count) cookies to \(credentialsPath.path)")
+        serializableCookies.forEach { cookie in
+            print("[CookieManager] Saved cookie: \(cookie.name) (expires: \(cookie.expiresDate?.description ?? "session"))")
+        }
     }
 
     private func loadCookies() {
-        guard FileManager.default.fileExists(atPath: credentialsPath.path) else { return }
+        defer { isLoaded = true }
+
+        guard FileManager.default.fileExists(atPath: credentialsPath.path) else {
+            print("[CookieManager] No saved cookies found at \(credentialsPath.path)")
+            return
+        }
         do {
             let data = try Data(contentsOf: credentialsPath)
             let serializableCookies = try JSONDecoder().decode([SerializableCookie].self, from: data)
+            print("[CookieManager] Loading \(serializableCookies.count) cookies")
             serializableCookies.forEach { cookie in
                 if let httpCookie = cookie.toHTTPCookie() {
                     HTTPCookieStorage.shared.setCookie(httpCookie)
+                    print("[CookieManager] Loaded cookie: \(cookie.name) (expires: \(cookie.expiresDate?.description ?? "session"))")
                 }
             }
         } catch {
-            // Failed to load or decode cookies, proceed with empty storage.
+            print("[CookieManager] Failed to load cookies: \(error)")
         }
     }
 }
